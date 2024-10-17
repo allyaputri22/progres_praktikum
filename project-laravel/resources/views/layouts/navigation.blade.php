@@ -40,9 +40,14 @@
                         <x-dropdown-link :href="route('product-create')">
                            Product Master
                         </x-dropdown-link>
+                         <x-dropdown-link :href="route('suppliers-create')">
+                           Suppliers Master
+                        </x-dropdown-link>
 
 
                     </x-slot>
+
+                   
                 </x-dropdown>
             </div>
            

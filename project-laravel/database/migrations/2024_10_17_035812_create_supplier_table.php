@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('product', function (Blueprint $table) {
-            $table->string('vendor')->after('qty');
+        Schema::create('suppliers', function (Blueprint $table) {
+            $table->id();
+            $table->string("supplier_name");
+            $table->string("supplier_address");
+            $table->string("phone");
+            $table->string("comment");
+            $table->timestamps();
         });
     }
 
@@ -21,8 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('product', function (Blueprint $table) {
-            $table->dropColumn('vendor');
-        });
+        Schema::dropIfExists('suppliers');
     }
 };

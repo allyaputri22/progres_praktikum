@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Product;
+use App\Models\Suppliers;
 
-class ProductController extends Controller
+class SuppliersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,7 +20,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-         return view('master-data.product-master.create-product');
+         return view('master-data.suppliers-master.create-suppliers');
     }
 
     /**
@@ -30,17 +30,15 @@ class ProductController extends Controller
     {
         //validasi input data
         $validasi_data = $request -> validate([
-        'product_name' => 'required|string|max:255',
-        'unit' => 'required|string|max:50',
-        'type' => 'required|string|max:50',
-        'information' => 'nullable|string',
-        'qty' => 'required|integer',
-        'vendor' => 'required|string|max:255',
+        'supplier_name' => 'required|string|max:255',
+        'supplier_address' => 'required|string|max:255',
+        'phone' => 'required|string|max:255',
+        'comment' => 'nullable|string',
         ]);
 
         //proses simpan data dalam database
-        Product::create($validasi_data);
-        return redirect()->back()->with('success','Product created succesfully');
+        Suppliers::create($validasi_data);
+        return redirect()->back()->with('success','Suppliers add succesfully');
 
     }
 
