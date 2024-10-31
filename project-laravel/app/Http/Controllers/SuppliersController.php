@@ -12,7 +12,10 @@ class SuppliersController extends Controller
      */
     public function index()
     {
-       
+       //mengambil data dari database melalui model Product
+       //fungsi all() sama seperti SELECT*FROM
+       $data = Suppliers::all();
+       return view("master-data.suppliers-master.index-suppliers", compact('data'));
     }
 
     /**
@@ -55,7 +58,8 @@ class SuppliersController extends Controller
      */
     public function edit(string $id)
     {
-        //
+         $suppliers = Suppliers::findOrFail($id);
+        return view('master-data.suppliers-master.edit-suppliers', compact('suppliers'));
     }
 
     /**
@@ -63,8 +67,24 @@ class SuppliersController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request -> validate([
+        'supplier_name' => 'required|string|max:255',
+        'supplier_address' => 'required|string|max:255',
+        'phone' => 'required|string|max:255',
+        'comment' => 'nullable|string',
+        ]);
+
+        $suppliers = Suppliers::findOrFail($id);
+        $suppliers -> update([
+        'supplier_name' => $request-> supplier_name,
+        'supplier_address' => $request-> supplier_address,
+        'phone' => $request-> phone,
+        'comment' => $request-> comment,
+        ]);
+
+        return redirect() -> back() -> with("Succes", "Suppliers update successfully!");
     }
+    
 
     /**
      * Remove the specified resource from storage.
