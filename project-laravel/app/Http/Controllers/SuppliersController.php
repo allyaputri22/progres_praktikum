@@ -91,6 +91,11 @@ class SuppliersController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $suppliers = Suppliers::find($id);
+        if ($suppliers) {
+            $suppliers->delete();
+            return redirect()->back()->with('succes', 'Supplier berhasil dihapus.');
+        }
+        return redirect()->back()->with('error', 'Supplier tidak ditemukan');
     }
 }
