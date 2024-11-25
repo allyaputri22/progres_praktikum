@@ -6,7 +6,7 @@ use App\Exports\ProductsExport;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Maatwebsite\Excel\Facades\Excel;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ProductController extends Controller
 {
@@ -130,5 +130,8 @@ class ProductController extends Controller
         return Excel::download(new ProductsExport, 'product.xlsx');
     }
 
-    
+    public function exportPdf()
+    {
+        return Excel::download(new ProductsExport, 'product.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
+    }
 }
