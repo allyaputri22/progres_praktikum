@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\ProductsExport;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Suppliers;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -15,8 +16,9 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        // Ambil semua produk
-        $query = Product::query();
+        $query = Product::with('supplier');
+
+
 
 
         // Cek apakah ada parameter 'search' di request
@@ -33,6 +35,7 @@ class ProductController extends Controller
 
         // Ambil produk dengan paginasi
         $data = $query->paginate(2);
+        // return $data;
 
 
         return view("master-data.product-master.index-product", compact('data'));
@@ -44,7 +47,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('master-data.product-master.create-product');
+        $suppliers = Suppliers::all();
+        return view("master-data.product-master.create-product", compact('suppliers'));
     }
 
     /**
@@ -60,6 +64,7 @@ class ProductController extends Controller
             'information' => 'nullable|string',
             'qty' => 'required|integer',
             'vendor' => 'required|string|max:255',
+            'supplier_id' => 'required|exists:suppliers,id',
         ]);
 
         //proses simpan data dalam database
@@ -81,8 +86,9 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
+        $suppliers = Suppliers::all();
         $product = Product::findOrFail($id);
-        return view('master-data.product-master.edit-product', compact('product'));
+        return view('master-data.product-master.edit-product', compact('product', 'suppliers'));
     }
 
     /**
@@ -97,6 +103,7 @@ class ProductController extends Controller
             'information' => 'nullable|string',
             'qty' => 'required|integer',
             'vendor' => 'required|string|max:255',
+            'supplier_id' => 'required|exists:suppliers,id',
         ]);
 
         $product = Product::findOrFail($id);
@@ -107,9 +114,10 @@ class ProductController extends Controller
             'information' => $request->information,
             'qty' => $request->qty,
             'vendor' => $request->vendor,
+            'supplier_id' => $request->supplier_id,
         ]);
 
-        return redirect()->back()->with("Succes", "Product update successfully!");
+        return redirect()->back()->with("success", "Product update successfully!");
     }
 
     /**
